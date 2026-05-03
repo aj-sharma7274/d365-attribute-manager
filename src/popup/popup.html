@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>D365 Attribute Manager</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 280px;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #080c18;
+      background-image:
+        radial-gradient(ellipse 120% 80% at 20% 10%, rgba(51,102,246,0.2) 0%, transparent 60%),
+        radial-gradient(ellipse 80% 80% at 80% 80%, rgba(139,92,246,0.14) 0%, transparent 60%);
+      color: rgba(240,244,255,0.9);
+      padding: 16px;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+    .logo-ico {
+      width: 34px; height: 34px; border-radius: 10px; flex-shrink: 0;
+      background: linear-gradient(135deg, #3366f6, #7c3aed);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; box-shadow: 0 0 16px rgba(51,102,246,0.5);
+    }
+    .logo-name { font-size: 13px; font-weight: 600; line-height: 1.2; }
+    .logo-sub  { font-size: 10px; color: rgba(160,174,220,0.4); }
+    .status {
+      display: flex; align-items: flex-start; gap: 8px;
+      padding: 10px 12px; border-radius: 12px; margin-bottom: 12px;
+      font-size: 12px; backdrop-filter: blur(16px);
+    }
+    .status.auth   { background: rgba(16,185,129,0.10); border: 1px solid rgba(16,185,129,0.22); color: #6ee7b7; }
+    .status.unauth { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2);  color: #fcd34d; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 3px; }
+    .dot.green  { background: #10b981; box-shadow: 0 0 6px #10b981; }
+    .dot.yellow { background: #f59e0b; }
+    .org { font-size: 10px; color: rgba(160,174,220,0.5); margin-top: 2px; font-family: monospace; word-break: break-all; }
+    .btn { width: 100%; padding: 9px; border: none; border-radius: 11px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+    .btn-primary { background: linear-gradient(135deg,#3366f6,#5b21b6); color: white; box-shadow: 0 0 16px rgba(51,102,246,0.35); }
+    .btn-primary:hover { box-shadow: 0 0 24px rgba(51,102,246,0.5); transform: translateY(-1px); }
+    .btn-ghost  { margin-top: 8px; background: rgba(255,255,255,0.04); color: rgba(160,174,220,0.5); border: 1px solid rgba(255,255,255,0.08); }
+    .btn-ghost:hover { background: rgba(255,255,255,0.08); color: rgba(160,174,220,0.8); }
+    .hint { font-size: 10px; color: rgba(160,174,220,0.3); text-align: center; margin-top: 12px; line-height: 1.5; }
+  </style>
+</head>
+<body>
+  <div class="logo">
+    <div class="logo-ico">⚡</div>
+    <div>
+      <div class="logo-name">D365 Attribute Manager</div>
+      <div class="logo-sub">Open Source · MIT</div>
+    </div>
+  </div>
+
+  <div id="status" class="status unauth">
+    <div class="dot yellow" id="dot"></div>
+    <div>
+      <div id="status-text">Checking...</div>
+      <div id="org-url" class="org"></div>
+    </div>
+  </div>
+
+  <button class="btn btn-primary" id="open-btn">Open App</button>
+  <button class="btn btn-ghost"   id="clear-btn">Clear Session</button>
+  <p class="hint">Navigate to your D365 org to authenticate automatically.</p>
+
+<script type="module" src="./popup.js"></script>
+</body>
+</html> 
