@@ -1,14 +1,16 @@
 // D365 Attribute Manager — Background Service Worker
 // Handles: D365 tab detection, API proxy, session management
 
-import {
-  TOKEN_TTL_MS,
-  MAX_RESPONSE_SIZE_KB,
-  MAX_MESSAGES_PER_MIN,
-  STORAGE_KEYS,
-  ALLOWED_API_PREFIX,
-  DYNAMICS_HOSTNAME_SUFFIX,
-} from '../app/globals/constants.js'
+// Inlined constants — service worker cannot import from app folder
+const TOKEN_TTL_MS            = 8 * 60 * 60 * 1000
+const MAX_MESSAGES_PER_MIN    = 60
+const ALLOWED_API_PREFIX      = 'api/data/'
+const DYNAMICS_HOSTNAME_SUFFIX = '.dynamics.com'
+const STORAGE_KEYS = {
+  THEME:   'd365am_theme',
+  SESSION: 'd365am_session',
+  LOGS:    'd365am_logs',
+}
 
 let _session = null
 
