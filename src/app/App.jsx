@@ -1,18 +1,18 @@
 import React, { useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
-import { useAuthStore }  from './store/authStore'
+import { useAuthStore } from './store/authStore'
 import { useThemeStore } from './store/themeStore'
-import AppLayout   from './components/layout/AppLayout'
-import AuthPage    from './pages/Auth'
-import Dashboard   from './pages/Dashboard'
-import DebugPage   from './pages/Debug'
+import AppLayout from './components/layout/AppLayout'
+import AuthPage from './pages/Auth'
+import Dashboard from './pages/Dashboard'
+import DebugPage from './pages/Debug'
 import SettingsPage from './pages/Settings'
 
 // Placeholder pages — built in upcoming phases
-const BulkCreate   = () => <PlaceholderPage title="Bulk Create Fields"  />
-const BulkDelete   = () => <PlaceholderPage title="Bulk Delete Fields"  />
-const ExportSchema = () => <PlaceholderPage title="Export Schema"       />
-const Logs         = () => <PlaceholderPage title="Operation Logs"      />
+import BulkCreatePage from './pages/BulkCreate'
+const BulkDelete = () => <PlaceholderPage title="Bulk Delete Fields" />
+const ExportSchema = () => <PlaceholderPage title="Export Schema" />
+const Logs = () => <PlaceholderPage title="Operation Logs" />
 
 function PlaceholderPage({ title }) {
   return (
@@ -44,8 +44,8 @@ function RequireAuth({ children }) {
 }
 
 export default function App() {
-  const { checkAuth }  = useAuthStore()
-  const { initTheme }  = useThemeStore()
+  const { checkAuth } = useAuthStore()
+  const { initTheme } = useThemeStore()
 
   useEffect(() => {
     initTheme()
@@ -63,13 +63,13 @@ export default function App() {
     <Routes>
       <Route path="/auth" element={<AuthPage />} />
       <Route path="/" element={<RequireAuth><AppLayout /></RequireAuth>}>
-        <Route index                element={<Dashboard   />} />
-        <Route path="bulk-create"   element={<BulkCreate   />} />
-        <Route path="bulk-delete"   element={<BulkDelete   />} />
+        <Route index element={<Dashboard />} />
+        <Route path="bulk-create" element={<BulkCreatePage />} />
+        <Route path="bulk-delete" element={<BulkDelete />} />
         <Route path="export-schema" element={<ExportSchema />} />
-        <Route path="logs"          element={<Logs         />} />
-        <Route path="settings"      element={<SettingsPage />} />
-        <Route path="debug"         element={<DebugPage    />} />
+        <Route path="logs" element={<Logs />} />
+        <Route path="settings" element={<SettingsPage />} />
+        <Route path="debug" element={<DebugPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
