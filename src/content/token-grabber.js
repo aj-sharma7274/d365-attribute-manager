@@ -67,7 +67,7 @@
     xhr.setRequestHeader('OData-Version',    '4.0')
     xhr.setRequestHeader('Content-Type',     'application/json')
     xhr.withCredentials = true
-    xhr.timeout = 30000
+   xhr.timeout = 60000 // 60 seconds for metadata operations
 
     xhr.onload = function () {
       // Security: limit response size

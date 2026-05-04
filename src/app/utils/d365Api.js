@@ -39,20 +39,20 @@ function buildAttributeBody(row) {
     val ? val.toLowerCase() === 'yes' : def
 
   const label = (text) => ({
-    '@odata.type':    'Microsoft.Dynamics.CRM.Label',
+    '@odata.type': 'Microsoft.Dynamics.CRM.Label',
     LocalizedLabels: [{
       '@odata.type': 'Microsoft.Dynamics.CRM.LocalizedLabel',
-      Label:         text,
-      LanguageCode:  1033,
+      Label: text,
+      LanguageCode: 1033,
     }],
   })
 
   const base = {
-    SchemaName:   row.SchemaName,
-    DisplayName:  label(row.DisplayName),
+    SchemaName: row.SchemaName,
+    DisplayName: label(row.DisplayName),
     RequiredLevel: { Value: yesNo(row.IsRequired) ? 'ApplicationRequired' : 'None' },
-    IsAuditEnabled:         { Value: yesNo(row.IsAuditEnabled, false) },
-    IsValidForAdvancedFind: { Value: yesNo(row.IsSearchable,   true) },
+    IsAuditEnabled: { Value: yesNo(row.IsAuditEnabled, false) },
+    IsValidForAdvancedFind: { Value: yesNo(row.IsSearchable, true) },
   }
 
   if (row.Description) {
@@ -64,66 +64,66 @@ function buildAttributeBody(row) {
       return {
         ...base,
         '@odata.type': 'Microsoft.Dynamics.CRM.StringAttributeMetadata',
-        MaxLength:  parseInt(row.MaxLength) || 100,
+        MaxLength: parseInt(row.MaxLength) || 100,
         FormatName: { Value: row.Format || 'Text' },
       }
 
-   case 'Text (Multi Line)':
-  return {
-    ...base,
-    '@odata.type': 'Microsoft.Dynamics.CRM.MemoAttributeMetadata',
-    MaxLength: parseInt(row.MaxLength) || 2000,
-  }
+    case 'Text (Multi Line)':
+      return {
+        ...base,
+        '@odata.type': 'Microsoft.Dynamics.CRM.MemoAttributeMetadata',
+        MaxLength: parseInt(row.MaxLength) || 2000,
+      }
 
     case 'Whole Number':
       return {
         ...base,
         '@odata.type': 'Microsoft.Dynamics.CRM.IntegerAttributeMetadata',
         MinValue: parseInt(row.MinValue) || -2147483648,
-        MaxValue: parseInt(row.MaxValue) ||  2147483647,
-        Format:   row.Format || 'None',
+        MaxValue: parseInt(row.MaxValue) || 2147483647,
+        Format: row.Format || 'None',
       }
 
     case 'Decimal Number':
       return {
         ...base,
         '@odata.type': 'Microsoft.Dynamics.CRM.DecimalAttributeMetadata',
-        MinValue:  parseFloat(row.MinValue) || 0,
-        MaxValue:  parseFloat(row.MaxValue) || 100000000000,
-        Precision: parseInt(row.Precision)  || 0,
+        MinValue: parseFloat(row.MinValue) || 0,
+        MaxValue: parseFloat(row.MaxValue) || 100000000000,
+        Precision: parseInt(row.Precision) || 0,
       }
 
     case 'Floating Point':
       return {
         ...base,
         '@odata.type': 'Microsoft.Dynamics.CRM.DoubleAttributeMetadata',
-        MinValue:  parseFloat(row.MinValue) || 0,
-        MaxValue:  parseFloat(row.MaxValue) || 1e100,
-        Precision: parseInt(row.Precision)  || 0,
+        MinValue: parseFloat(row.MinValue) || 0,
+        MaxValue: parseFloat(row.MaxValue) || 1e100,
+        Precision: parseInt(row.Precision) || 0,
       }
 
     case 'Currency':
       return {
         ...base,
-        '@odata.type':   'Microsoft.Dynamics.CRM.MoneyAttributeMetadata',
-        MinValue:        parseFloat(row.MinValue)      || 0,
-        MaxValue:        parseFloat(row.MaxValue)      || 922337203685477,
-        Precision:       parseInt(row.Precision)       || 2,
+        '@odata.type': 'Microsoft.Dynamics.CRM.MoneyAttributeMetadata',
+        MinValue: parseFloat(row.MinValue) || 0,
+        MaxValue: parseFloat(row.MaxValue) || 922337203685477,
+        Precision: parseInt(row.Precision) || 2,
         PrecisionSource: parseInt(row.PrecisionSource) || 2,
       }
 
     case 'Date & Time':
       return {
         ...base,
-        '@odata.type':    'Microsoft.Dynamics.CRM.DateTimeAttributeMetadata',
-        Format:           row.Format || 'DateAndTime',
+        '@odata.type': 'Microsoft.Dynamics.CRM.DateTimeAttributeMetadata',
+        Format: row.Format || 'DateAndTime',
         DateTimeBehavior: { Value: row.DateTimeBehavior || 'UserLocal' },
       }
 
     case 'Choice (Option Set)':
     case 'Multi-Select Choice': {
       const isMulti = row._sheet === 'Multi-Select Choice'
-      const type    = isMulti
+      const type = isMulti
         ? 'Microsoft.Dynamics.CRM.MultiSelectPicklistAttributeMetadata'
         : 'Microsoft.Dynamics.CRM.PicklistAttributeMetadata'
 
@@ -139,10 +139,10 @@ function buildAttributeBody(row) {
         ...base,
         '@odata.type': type,
         OptionSet: {
-          '@odata.type':  'Microsoft.Dynamics.CRM.OptionSetMetadata',
-          IsGlobal:       false,
-          OptionSetType:  isMulti ? 'MultiSelect' : 'Picklist',
-          Options:        options,
+          '@odata.type': 'Microsoft.Dynamics.CRM.OptionSetMetadata',
+          IsGlobal: false,
+          OptionSetType: isMulti ? 'MultiSelect' : 'Picklist',
+          Options: options,
         },
         DefaultFormValue: row.DefaultValue ? parseInt(row.DefaultValue) : null,
       }
@@ -154,8 +154,8 @@ function buildAttributeBody(row) {
         '@odata.type': 'Microsoft.Dynamics.CRM.BooleanAttributeMetadata',
         OptionSet: {
           '@odata.type': 'Microsoft.Dynamics.CRM.BooleanOptionSetMetadata',
-          TrueOption:  { Value: 1, Label: label(row.TrueLabel  || 'Yes') },
-          FalseOption: { Value: 0, Label: label(row.FalseLabel || 'No')  },
+          TrueOption: { Value: 1, Label: label(row.TrueLabel || 'Yes') },
+          FalseOption: { Value: 0, Label: label(row.FalseLabel || 'No') },
         },
         DefaultValue: row.DefaultValue === 'true',
       }
@@ -170,16 +170,16 @@ function buildAttributeBody(row) {
       return {
         ...base,
         '@odata.type': 'Microsoft.Dynamics.CRM.FileAttributeMetadata',
-        MaxSizeInKB:   parseInt(row.MaxSizeInKB) || 32768,
+        MaxSizeInKB: parseInt(row.MaxSizeInKB) || 32768,
       }
 
     case 'Image':
       return {
         ...base,
-        '@odata.type':      'Microsoft.Dynamics.CRM.ImageAttributeMetadata',
-        IsPrimaryImage:     yesNo(row.IsPrimaryImage),
-        MaxSizeInKB:        parseInt(row.MaxSizeInKB) || 10240,
-        CanStoreFullImage:  yesNo(row.CanStoreFullImage, true),
+        '@odata.type': 'Microsoft.Dynamics.CRM.ImageAttributeMetadata',
+        IsPrimaryImage: yesNo(row.IsPrimaryImage),
+        MaxSizeInKB: parseInt(row.MaxSizeInKB) || 10240,
+        CanStoreFullImage: yesNo(row.CanStoreFullImage, true),
       }
 
     default:
@@ -190,8 +190,8 @@ function buildAttributeBody(row) {
 // ── Create single attribute ───────────────────────────────────────────────────
 export async function createAttribute(row) {
   const entity = row.EntitySchemaName.toLowerCase()
-  const body   = buildAttributeBody(row)
-  const path   = `api/data/${D365_API_VERSION}/EntityDefinitions(LogicalName='${entity}')/Attributes`
+  const body = buildAttributeBody(row)
+  const path = `api/data/${D365_API_VERSION}/EntityDefinitions(LogicalName='${entity}')/Attributes`
 
   const result = await apiRequest('POST', path, body)
 
@@ -238,10 +238,10 @@ async function addAttributeToSolution(solutionName, entitySchemaName, attributeS
   await apiRequest('POST',
     `api/data/${D365_API_VERSION}/AddSolutionComponent`,
     {
-      ComponentId:             attrResult.MetadataId,
-      ComponentType:           2,
-      SolutionUniqueName:      solutionName,
-      AddRequiredComponents:   false,
+      ComponentId: attrResult.MetadataId,
+      ComponentType: 2,
+      SolutionUniqueName: solutionName,
+      AddRequiredComponents: false,
       DoNotIncludeSubcomponents: false,
       IncludedComponentSettingsValues: null,
     }
@@ -299,4 +299,130 @@ export function testConnection() {
   return apiRequest('GET',
     `api/data/${D365_API_VERSION}/accounts?$top=1&$select=name,accountid`
   )
+}
+
+// ── Check field dependencies ──────────────────────────────────────────────────
+export async function checkFieldDependencies(entityLogicalName, attributeLogicalName) {
+  try {
+    // Check if field is custom
+    const attrResult = await apiRequest('GET',
+      `api/data/${D365_API_VERSION}/EntityDefinitions(LogicalName='${entityLogicalName}')/Attributes(LogicalName='${attributeLogicalName}')?$select=LogicalName,SchemaName,IsCustomAttribute,DisplayName`
+    )
+
+    if (!attrResult) {
+      return { exists: false, isSystem: false, dependencies: [], safe: false, error: 'Field not found' }
+    }
+
+    const isSystem = !attrResult.IsCustomAttribute
+
+    // Check dependencies via RetrieveDependenciesForDelete
+    let dependencies = []
+    try {
+      const depResult = await apiRequest('GET',
+        `api/data/${D365_API_VERSION}/RetrieveDependenciesForDelete(ComponentType=2,ObjectId=${attrResult.MetadataId})`
+      )
+      dependencies = mapDependencies(depResult?.value || [])
+    } catch {
+      // Some orgs don't support this endpoint — treat as unknown
+      dependencies = []
+    }
+
+    return {
+      exists: true,
+      isSystem,
+      isCustom: attrResult.IsCustomAttribute,
+      displayName: attrResult.DisplayName?.UserLocalizedLabel?.Label || attributeLogicalName,
+      metadataId: attrResult.MetadataId,
+      dependencies,
+      safe: !isSystem && dependencies.length === 0,
+    }
+  } catch (err) {
+    return {
+      exists: false,
+      isSystem: false,
+      dependencies: [],
+      safe: false,
+      error: err.message,
+    }
+  }
+}
+// Map dependency type codes to readable names + removal steps
+const DEP_TYPES = {
+  1:   { name: 'Entity',          steps: ['Remove entity from solution'] },
+  2:   { name: 'Attribute',       steps: ['Delete dependent attribute first'] },
+  9:   { name: 'Form',            steps: ['Open the form', 'Remove this field from the form layout', 'Save and publish the form'] },
+  26:  { name: 'View (SavedQuery)', steps: ['Open the view', 'Remove this field from view columns and filters', 'Save and publish the view'] },
+  29:  { name: 'Workflow',        steps: ['Open the workflow/flow', 'Remove references to this field', 'Save and activate the workflow'] },
+  48:  { name: 'Business Rule',   steps: ['Open the business rule', 'Remove conditions/actions using this field', 'Save and activate the rule'] },
+  92:  { name: 'Modern Flow',     steps: ['Open Power Automate', 'Edit the flow', 'Remove steps referencing this field', 'Save the flow'] },
+  29:  { name: 'Cloud Flow',      steps: ['Open Power Automate', 'Edit the cloud flow', 'Remove field references', 'Save'] },
+  9006:{ name: 'Model-driven App',steps: ['Open the app in App Designer', 'Remove field references', 'Save and publish'] },
+}
+
+function mapDependencies(rawDeps) {
+  return rawDeps.map(dep => {
+    const typeInfo = DEP_TYPES[dep.DependentComponentType] || {
+      name:  `Component (type ${dep.DependentComponentType})`,
+      steps: ['Manually remove the dependency in D365 customizations'],
+    }
+    return {
+      type:        dep.DependentComponentType,
+      typeName:    typeInfo.name,
+      componentId: dep.DependentComponentObjectId,
+      steps:       typeInfo.steps,
+    }
+  })
+}
+// ── Bulk check dependencies ───────────────────────────────────────────────────
+export async function bulkCheckDependencies(rows, onProgress) {
+  const results = []
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i]
+    onProgress?.({ current: i + 1, total: rows.length, row })
+
+    const check = await checkFieldDependencies(
+      row.EntitySchemaName.toLowerCase(),
+      row.FieldSchemaName.toLowerCase()
+    )
+    results.push({ ...check, row })
+
+    // Small delay between checks
+    if (i < rows.length - 1) {
+      await new Promise(r => setTimeout(r, 200))
+    }
+  }
+  return results
+}
+
+// ── Delete single attribute ───────────────────────────────────────────────────
+export async function deleteSingleAttribute(entityLogicalName, attributeLogicalName) {
+  const path = `api/data/${D365_API_VERSION}/EntityDefinitions(LogicalName='${entityLogicalName}')/Attributes(LogicalName='${attributeLogicalName}')`
+  await apiRequest('DELETE', path)
+  return { success: true, schemaName: attributeLogicalName }
+}
+
+// ── Bulk delete with progress ─────────────────────────────────────────────────
+export async function bulkDeleteAttributes(safeFields, onProgress) {
+  const results = []
+  for (let i = 0; i < safeFields.length; i++) {
+    const item = safeFields[i]
+    onProgress?.({ current: i + 1, total: safeFields.length, row: item.row, status: 'processing' })
+
+    try {
+      await deleteSingleAttribute(
+        item.row.EntitySchemaName.toLowerCase(),
+        item.row.FieldSchemaName.toLowerCase()
+      )
+      results.push({ success: true, schemaName: item.row.FieldSchemaName, row: item.row })
+      onProgress?.({ current: i + 1, total: safeFields.length, row: item.row, status: 'success' })
+    } catch (err) {
+      results.push({ success: false, schemaName: item.row.FieldSchemaName, error: err.message, row: item.row })
+      onProgress?.({ current: i + 1, total: safeFields.length, row: item.row, status: 'error', error: err.message })
+    }
+
+    if (i < safeFields.length - 1) {
+      await new Promise(r => setTimeout(r, 300))
+    }
+  }
+  return results
 }

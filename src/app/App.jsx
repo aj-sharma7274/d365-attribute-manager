@@ -10,7 +10,7 @@ import SettingsPage from './pages/Settings'
 
 // Placeholder pages — built in upcoming phases
 import BulkCreatePage from './pages/BulkCreate'
-const BulkDelete = () => <PlaceholderPage title="Bulk Delete Fields" />
+import BulkDeletePage from './pages/BulkDelete'
 const ExportSchema = () => <PlaceholderPage title="Export Schema" />
 const Logs = () => <PlaceholderPage title="Operation Logs" />
 
@@ -65,7 +65,7 @@ export default function App() {
       <Route path="/" element={<RequireAuth><AppLayout /></RequireAuth>}>
         <Route index element={<Dashboard />} />
         <Route path="bulk-create" element={<BulkCreatePage />} />
-        <Route path="bulk-delete" element={<BulkDelete />} />
+<Route path="bulk-delete" element={<BulkDeletePage />} />
         <Route path="export-schema" element={<ExportSchema />} />
         <Route path="logs" element={<Logs />} />
         <Route path="settings" element={<SettingsPage />} />

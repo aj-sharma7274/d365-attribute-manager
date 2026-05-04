@@ -238,3 +238,72 @@ export function generateBulkCreateTemplate() {
   a.click()
   setTimeout(() => URL.revokeObjectURL(url), 10000)
 }
+
+// ── Bulk Delete Template ──────────────────────────────────────────────────────
+export function generateBulkDeleteTemplate() {
+  const wb = XLSX.utils.book_new()
+
+  // Instructions sheet
+  const instrRows = [
+    ['D365 Attribute Manager — Bulk Delete Template'],
+    [''],
+    ['HOW TO USE'],
+    ['Step 1', 'Fill in the "Fields to Delete" sheet below'],
+    ['Step 2', 'Entity Schema Name = logical name of the entity e.g. account, contact'],
+    ['Step 3', 'Field Schema Name = logical name of the field e.g. new_myfield'],
+    ['Step 4', 'Reason is optional — for your own records'],
+    ['Step 5', 'Save and upload in the Bulk Delete page'],
+    ['Step 6', 'Extension checks dependencies before deleting anything'],
+    ['Step 7', 'Only safe fields (no dependencies) will be deleted'],
+    [''],
+    ['IMPORTANT NOTES'],
+    ['', '• System fields cannot be deleted'],
+    ['', '• Fields used in forms, views, rules or flows cannot be deleted until dependencies are removed'],
+    ['', '• Deletion is PERMANENT and cannot be undone'],
+    ['', '• Always take a solution export backup before bulk deleting'],
+    [''],
+    ['EXAMPLE'],
+    ['Entity Schema Name', 'Field Schema Name', 'Reason'],
+    ['account',            'new_oldfield',       'Replaced by new field'],
+    ['contact',            'new_legacyrating',   'No longer needed'],
+  ]
+
+  const instrWs = XLSX.utils.aoa_to_sheet(instrRows)
+  instrWs['!cols'] = [{ wch: 25 }, { wch: 25 }, { wch: 40 }]
+  XLSX.utils.book_append_sheet(wb, instrWs, 'Instructions')
+
+  // Fields to Delete sheet
+  const headers = [
+    ['Entity Schema Name *', 'Field Schema Name *', 'Reason (optional)'],
+    ['ℹ️ Logical name of the entity', 'ℹ️ Logical name of the field', 'ℹ️ For your records only'],
+    ['e.g. account', 'e.g. new_myfield', 'e.g. No longer needed'],
+  ]
+
+  // Add 20 empty rows
+  for (let i = 0; i < 20; i++) {
+    headers.push(['', '', ''])
+  }
+
+  const ws = XLSX.utils.aoa_to_sheet(headers)
+  ws['!cols'] = [{ wch: 28 }, { wch: 28 }, { wch: 40 }]
+  ws['!rows'] = [
+    { hpt: 28 },
+    { hpt: 32 },
+    { hpt: 20 },
+    ...Array(20).fill({ hpt: 18 }),
+  ]
+  ws['!freeze'] = { xSplit: 0, ySplit: 3 }
+  XLSX.utils.book_append_sheet(wb, ws, 'Fields to Delete')
+
+  // Trigger download
+  const buf  = XLSX.write(wb, { bookType: 'xlsx', type: 'array' })
+  const blob = new Blob([buf], {
+    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+  })
+  const url = URL.createObjectURL(blob)
+  const a   = document.createElement('a')
+  a.href     = url
+  a.download = 'D365_BulkDelete_Template.xlsx'
+  a.click()
+  setTimeout(() => URL.revokeObjectURL(url), 10000)
+}
