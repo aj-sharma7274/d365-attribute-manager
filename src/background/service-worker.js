@@ -240,7 +240,7 @@ function sanitizeUrl(url) {
 
 function isValidApiPath(path) {
   if (!path || typeof path !== 'string') return false
-  if (path.length > 500) return false
+  if (path.length > 2000) return false
   // Must start with allowed prefix
   if (!path.replace(/^\/+/, '').startsWith(ALLOWED_API_PREFIX)) return false
   // Block path traversal attempts
