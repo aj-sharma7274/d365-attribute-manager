@@ -14,6 +14,8 @@ import { bulkCheckDependencies, bulkDeleteAttributes } from '../utils/d365Api.js
 import StepWizard from '../components/ui/StepWizard.jsx'
 import FileDropzone from '../components/ui/FileDropzone.jsx'
 import ProgressTracker from '../components/ui/ProgressTracker.jsx'
+import { useLogStore } from '../store/logStore.js'
+import { useAuthStore } from '../store/authStore.js'
 
 const STEPS = ['Download Template', 'Upload & Validate', 'Review & Confirm', 'Delete']
 
@@ -81,6 +83,8 @@ function parseDeleteWorkbook(workbook) {
 
 export default function BulkDeletePage() {
     const navigate = useNavigate()
+    const { addLog } = useLogStore()
+    const { orgUrl } = useAuthStore()
 
     const [step, setStep] = useState(0)
     const [file, setFile] = useState(null)
@@ -191,6 +195,19 @@ export default function BulkDeletePage() {
                 toast.success(`${successCount} fields deleted successfully!`)
             } else {
                 toast(`${successCount} deleted, ${errorCount} failed.`, { icon: '⚠️' })
+            }
+            // Log all results
+            for (const r of results) {
+                await addLog({
+                    operation: 'DELETE',
+                    status: r.success ? 'success' : 'error',
+                    entity: r.row?.EntitySchemaName || '',
+                    schemaName: r.schemaName || '',
+                    fieldType: '',
+                    solution: '',
+                    error: r.error || null,
+                    orgUrl,
+                })
             }
             setDone(true)
         } catch (err) {

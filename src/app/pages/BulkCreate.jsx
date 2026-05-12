@@ -8,39 +8,40 @@ import {
 } from 'lucide-react'
 
 import { generateBulkCreateTemplate } from '../utils/templateGenerator.js'
-import { validateWorkbook }           from '../utils/validator.js'
-import { bulkCreateAttributes }       from '../utils/d365Api.js'
-import { useAuthStore }               from '../store/authStore.js'
+import { validateWorkbook } from '../utils/validator.js'
+import { bulkCreateAttributes } from '../utils/d365Api.js'
+import { useAuthStore } from '../store/authStore.js'
 
-import StepWizard        from '../components/ui/StepWizard.jsx'
-import FileDropzone      from '../components/ui/FileDropzone.jsx'
-import ValidationReport  from '../components/ui/ValidationReport.jsx'
-import ProgressTracker   from '../components/ui/ProgressTracker.jsx'
-
+import StepWizard from '../components/ui/StepWizard.jsx'
+import FileDropzone from '../components/ui/FileDropzone.jsx'
+import ValidationReport from '../components/ui/ValidationReport.jsx'
+import ProgressTracker from '../components/ui/ProgressTracker.jsx'
+import { useLogStore } from '../store/logStore.js'
 const STEPS = ['Download Template', 'Upload File', 'Validate', 'Process']
 
 const SHEET_TYPES = [
-  'Text (Single Line)',  'Text (Multi Line)',
-  'Whole Number',        'Decimal Number',
-  'Floating Point',      'Currency',
-  'Date & Time',         'Choice (Option Set)',
+  'Text (Single Line)', 'Text (Multi Line)',
+  'Whole Number', 'Decimal Number',
+  'Floating Point', 'Currency',
+  'Date & Time', 'Choice (Option Set)',
   'Multi-Select Choice', 'Yes No (Boolean)',
-  'Lookup',              'File',
+  'Lookup', 'File',
   'Image',
 ]
 
 export default function BulkCreatePage() {
-  const navigate         = useNavigate()
-  const { orgUrl }       = useAuthStore()
+  const navigate = useNavigate()
+  const { orgUrl } = useAuthStore()
+  const { addLog } = useLogStore()
 
-  const [step,           setStep]           = useState(0)
-  const [file,           setFile]           = useState(null)
-  const [validation,     setValidation]     = useState(null)
-  const [allRows,        setAllRows]        = useState([])
-  const [progress,       setProgress]       = useState(null)
+  const [step, setStep] = useState(0)
+  const [file, setFile] = useState(null)
+  const [validation, setValidation] = useState(null)
+  const [allRows, setAllRows] = useState([])
+  const [progress, setProgress] = useState(null)
   const [processResults, setProcessResults] = useState([])
-  const [processing,     setProcessing]     = useState(false)
-  const [done,           setDone]           = useState(false)
+  const [processing, setProcessing] = useState(false)
+  const [done, setDone] = useState(false)
 
   // ── Step 1: Download template ──────────────────────────────────────────────
   const handleDownload = () => {
@@ -63,10 +64,10 @@ export default function BulkCreatePage() {
       try {
         const data = new Uint8Array(e.target.result)
         // Security: disable formula evaluation
-        const wb   = XLSX.read(data, {
-          type:        'array',
+        const wb = XLSX.read(data, {
+          type: 'array',
           cellFormula: false,
-          cellHTML:    false,
+          cellHTML: false,
         })
         const results = validateWorkbook(wb)
         setValidation(results)
@@ -106,21 +107,34 @@ export default function BulkCreatePage() {
         setProgress(prog)
         if (prog.status !== 'processing') {
           setProcessResults(prev => [...prev, {
-            success:    prog.status === 'success',
+            success: prog.status === 'success',
             schemaName: prog.row.SchemaName,
-            error:      prog.error,
-            row:        prog.row,
+            error: prog.error,
+            row: prog.row,
           }])
         }
       })
 
       const successCount = results.filter(r => r.success).length
-      const errorCount   = results.filter(r => !r.success).length
+      const errorCount = results.filter(r => !r.success).length
 
       if (errorCount === 0) {
         toast.success(`All ${successCount} fields created successfully!`)
       } else {
         toast(`${successCount} succeeded, ${errorCount} failed.`, { icon: '⚠️' })
+      }
+      // Log all results
+      for (const r of results) {
+        await addLog({
+          operation: 'CREATE',
+          status: r.success ? 'success' : 'error',
+          entity: r.row?.EntitySchemaName || '',
+          schemaName: r.schemaName || '',
+          fieldType: r.row?._sheet || '',
+          solution: r.row?.SolutionName || '',
+          error: r.error || null,
+          orgUrl,
+        })
       }
       setDone(true)
     } catch (err) {
@@ -138,8 +152,8 @@ export default function BulkCreatePage() {
   // Sheet summary for step 2
   const sheetSummary = validation
     ? Object.entries(validation.parsedSheets)
-        .map(([name, rows]) => ({ name, count: rows.length }))
-        .filter(s => s.count > 0)
+      .map(([name, rows]) => ({ name, count: rows.length }))
+      .filter(s => s.count > 0)
     : []
 
   return (
@@ -152,8 +166,8 @@ export default function BulkCreatePage() {
           className="p-2 rounded-xl transition-all"
           style={{
             background: 'var(--glass1)',
-            border:     '1px solid var(--glass-border)',
-            color:      'var(--text-muted)',
+            border: '1px solid var(--glass-border)',
+            color: 'var(--text-muted)',
           }}
         >
           <ArrowLeft size={16} />
@@ -192,7 +206,7 @@ export default function BulkCreatePage() {
                 className="flex items-center gap-2 px-3 py-2 rounded-xl"
                 style={{
                   background: 'var(--glass1)',
-                  border:     '1px solid var(--glass-border)',
+                  border: '1px solid var(--glass-border)',
                 }}
               >
                 <FileSpreadsheet size={12} style={{ color: 'var(--text-accent)', flexShrink: 0 }} />
@@ -273,7 +287,7 @@ export default function BulkCreatePage() {
                     className="flex items-center justify-between px-3 py-2 rounded-xl"
                     style={{
                       background: 'var(--accent-bg)',
-                      border:     '1px solid var(--accent-border)',
+                      border: '1px solid var(--accent-border)',
                     }}
                   >
                     <span style={{ fontSize: 11, color: 'var(--text-secondary)' }}>{s.name}</span>

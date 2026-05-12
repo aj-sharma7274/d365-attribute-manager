@@ -179,7 +179,9 @@ async function handleApiProxy(payload, sendResponse) {
 // ── Clear Session ─────────────────────────────────────────────────────────────
 async function handleClearSession(sendResponse) {
   _session = null
+  // Clear session data including logs
   await chrome.storage.session.remove([STORAGE_KEYS.SESSION])
+  await chrome.storage.session.remove(['d365am_session_logs'])
   chrome.action.setBadgeText({ text: '' })
   sendResponse({ success: true })
 }
@@ -202,7 +204,9 @@ function handleOpenAppTab(sendResponse) {
 chrome.tabs.onRemoved.addListener((tabId) => {
   if (_session?.tabId === tabId) {
     _session = null
+    // Clear all session data including logs when D365 tab closes
     chrome.storage.session.remove([STORAGE_KEYS.SESSION])
+    chrome.storage.session.remove(['d365am_session_logs'])
     chrome.action.setBadgeText({ text: '' })
   }
 })

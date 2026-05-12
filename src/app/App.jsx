@@ -12,7 +12,7 @@ import SettingsPage from './pages/Settings'
 import BulkCreatePage from './pages/BulkCreate'
 import BulkDeletePage from './pages/BulkDelete'
 import ExportSchemaPage from './pages/ExportSchema'
-const Logs = () => <PlaceholderPage title="Operation Logs" />
+import LogsPage from './pages/Logs'
 
 function PlaceholderPage({ title }) {
   return (
@@ -67,7 +67,7 @@ export default function App() {
         <Route path="bulk-create" element={<BulkCreatePage />} />
         <Route path="bulk-delete" element={<BulkDeletePage />} />
         <Route path="export-schema" element={<ExportSchemaPage />} />
-        <Route path="logs" element={<Logs />} />
+       <Route path="logs" element={<LogsPage />} />
         <Route path="settings" element={<SettingsPage />} />
         <Route path="debug" element={<DebugPage />} />
       </Route>
