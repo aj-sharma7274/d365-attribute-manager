@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "D365 Attribute Manager",
+  "name": "D365 Power Kit",
   "version": "1.0.0",
-  "description": "Bulk create, delete and export D365 attributes securely.",
+  "description": "Power tools for Microsoft Dynamics 365 — bulk manage attributes, export schema and more.",
 
   "permissions": [
     "tabs",

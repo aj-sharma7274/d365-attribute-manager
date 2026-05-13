@@ -1,11 +1,11 @@
 // D365 Attribute Manager — Global Constants
 // Update version here for every release
 
-export const APP_NAME        = 'D365 Attribute Manager'
+export const APP_NAME        = 'D365 Power Kit'
 export const APP_VERSION     = '1.0.0'
-export const APP_DESCRIPTION = 'Bulk manage D365 attributes securely'
-export const GITHUB_URL  = 'https://github.com/aj-sharma7274/d365-attribute-manager'
-export const ISSUES_URL  = 'https://github.com/aj-sharma7274/d365-attribute-manager/issues/new'
+export const APP_DESCRIPTION = 'Power tools for Microsoft Dynamics 365'
+export const GITHUB_URL      = 'https://github.com/aj-sharma7274/d365-power-kit'
+export const ISSUES_URL      = 'https://github.com/aj-sharma7274/d365-power-kit/issues/new'
 
 // API
 export const D365_API_VERSION = 'v9.0'

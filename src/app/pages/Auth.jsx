@@ -5,9 +5,9 @@ import { useAuthStore } from '../store/authStore'
 
 const STEP = {
   CHECKING: 'checking',
-  WAITING:  'waiting',
-  DONE:     'done',
-  ERROR:    'error',
+  WAITING: 'waiting',
+  DONE: 'done',
+  ERROR: 'error',
 }
 
 function sendMsg(message) {
@@ -29,9 +29,9 @@ function sendMsg(message) {
 export default function AuthPage() {
   const navigate = useNavigate()
   const { authenticated, checkAuth } = useAuthStore()
-  const [step,      setStep]      = useState(STEP.CHECKING)
-  const [orgUrl,    setOrgUrl]    = useState(null)
-  const [error,     setError]     = useState(null)
+  const [step, setStep] = useState(STEP.CHECKING)
+  const [orgUrl, setOrgUrl] = useState(null)
+  const [error, setError] = useState(null)
   const [pollCount, setPollCount] = useState(0)
 
   useEffect(() => {
@@ -82,10 +82,10 @@ export default function AuthPage() {
   }, [check])
 
   const stepColors = {
-    [STEP.CHECKING]: { bg: 'rgba(51,102,246,0.10)',  border: 'rgba(51,102,246,0.25)' },
-    [STEP.WAITING]:  { bg: 'rgba(245,158,11,0.08)',  border: 'rgba(245,158,11,0.25)' },
-    [STEP.DONE]:     { bg: 'rgba(16,185,129,0.08)',  border: 'rgba(16,185,129,0.25)' },
-    [STEP.ERROR]:    { bg: 'rgba(239,68,68,0.08)',   border: 'rgba(239,68,68,0.25)'  },
+    [STEP.CHECKING]: { bg: 'rgba(51,102,246,0.10)', border: 'rgba(51,102,246,0.25)' },
+    [STEP.WAITING]: { bg: 'rgba(245,158,11,0.08)', border: 'rgba(245,158,11,0.25)' },
+    [STEP.DONE]: { bg: 'rgba(16,185,129,0.08)', border: 'rgba(16,185,129,0.25)' },
+    [STEP.ERROR]: { bg: 'rgba(239,68,68,0.08)', border: 'rgba(239,68,68,0.25)' },
   }
 
   const c = stepColors[step]
@@ -121,7 +121,7 @@ export default function AuthPage() {
             <Shield size={30} className="text-white" />
           </div>
           <h1 className="font-display font-bold text-3xl text-white mb-2">
-            D365 Attribute Manager
+            D365 Power Kit
           </h1>
           <p style={{ color: 'rgba(160,174,220,0.5)', fontSize: 13 }}>
             Open source · Secure · MIT License
@@ -162,18 +162,18 @@ export default function AuthPage() {
               fontSize: 15, marginBottom: 6
             }}>
               {step === STEP.CHECKING && 'Detecting D365 session...'}
-              {step === STEP.WAITING  && 'Waiting for D365 tab'}
-              {step === STEP.DONE     && 'Connected!'}
-              {step === STEP.ERROR    && 'Connection failed'}
+              {step === STEP.WAITING && 'Waiting for D365 tab'}
+              {step === STEP.DONE && 'Connected!'}
+              {step === STEP.ERROR && 'Connection failed'}
             </h3>
 
             <p style={{
               fontSize: 12, color: 'rgba(160,174,220,0.6)', lineHeight: 1.6
             }}>
               {step === STEP.CHECKING && 'Checking if your D365 org is open...'}
-              {step === STEP.WAITING  && `Open your D365 org in Chrome. Checking every 5s... (${pollCount})`}
-              {step === STEP.DONE     && orgUrl}
-              {step === STEP.ERROR    && error}
+              {step === STEP.WAITING && `Open your D365 org in Chrome. Checking every 5s... (${pollCount})`}
+              {step === STEP.DONE && orgUrl}
+              {step === STEP.ERROR && error}
             </p>
 
             {step === STEP.WAITING && (

@@ -5,24 +5,24 @@ import {
   ScrollText, LogOut, ChevronLeft, ChevronRight,
   Shield, Settings, Menu, X
 } from 'lucide-react'
-import { useAuthStore }  from '../../store/authStore'
+import { useAuthStore } from '../../store/authStore'
 import { useThemeStore } from '../../store/themeStore'
 import toast from 'react-hot-toast'
 import clsx from 'clsx'
 
 const NAV = [
-  { to: '/',              label: 'Dashboard',    icon: LayoutDashboard, end: true },
-  { to: '/bulk-create',   label: 'Bulk Create',  icon: PlusSquare },
-  { to: '/bulk-delete',   label: 'Bulk Delete',  icon: Trash2     },
-  { to: '/export-schema', label: 'Export Schema',icon: Download   },
-  { to: '/logs',          label: 'Logs',         icon: ScrollText },
-  { to: '/settings',      label: 'Settings',     icon: Settings   },
+  { to: '/', label: 'Dashboard', icon: LayoutDashboard, end: true },
+  { to: '/bulk-create', label: 'Bulk Create', icon: PlusSquare },
+  { to: '/bulk-delete', label: 'Bulk Delete', icon: Trash2 },
+  { to: '/export-schema', label: 'Export Schema', icon: Download },
+  { to: '/logs', label: 'Logs', icon: ScrollText },
+  { to: '/settings', label: 'Settings', icon: Settings },
 ]
 
 export default function AppLayout() {
-  const [collapsed,    setCollapsed]    = useState(false)
-  const [mobileOpen,   setMobileOpen]   = useState(false)
-  const { orgUrl, clearSession }        = useAuthStore()
+  const [collapsed, setCollapsed] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const { orgUrl, clearSession } = useAuthStore()
   const navigate = useNavigate()
 
   const handleLogout = async () => {
@@ -51,7 +51,7 @@ export default function AppLayout() {
           <div>
             <div className="font-display font-bold text-sm"
               style={{ color: 'var(--text-primary)', lineHeight: 1.2 }}>
-              D365 AM
+              D365 PK
             </div>
             <div style={{ fontSize: 10, color: 'var(--text-muted)', fontFamily: 'monospace' }}>
               Open Source
@@ -74,9 +74,9 @@ export default function AppLayout() {
               collapsed && 'justify-center'
             )}
             style={({ isActive }) => ({
-              background:  isActive ? 'var(--nav-active-bg)'   : 'transparent',
-              border:      isActive ? `1px solid var(--nav-active-border)` : '1px solid transparent',
-              color:       isActive ? 'var(--nav-active-text)' : 'var(--nav-inactive-text)',
+              background: isActive ? 'var(--nav-active-bg)' : 'transparent',
+              border: isActive ? `1px solid var(--nav-active-border)` : '1px solid transparent',
+              color: isActive ? 'var(--nav-active-text)' : 'var(--nav-inactive-text)',
             })}
           >
             <Icon size={16} className="flex-shrink-0" />
@@ -128,9 +128,9 @@ export default function AppLayout() {
 
       {/* Background orbs */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden" style={{ zIndex: 0 }}>
-        <div style={{ position:'absolute', width:500, height:500, borderRadius:'50%', background:'var(--page-grad1)', filter:'blur(80px)', top:-100, left:-80 }} />
-        <div style={{ position:'absolute', width:400, height:400, borderRadius:'50%', background:'var(--page-grad2)', filter:'blur(80px)', top:50, right:-60 }} />
-        <div style={{ position:'absolute', width:350, height:350, borderRadius:'50%', background:'var(--page-grad3)', filter:'blur(80px)', bottom:-60, left:'40%' }} />
+        <div style={{ position: 'absolute', width: 500, height: 500, borderRadius: '50%', background: 'var(--page-grad1)', filter: 'blur(80px)', top: -100, left: -80 }} />
+        <div style={{ position: 'absolute', width: 400, height: 400, borderRadius: '50%', background: 'var(--page-grad2)', filter: 'blur(80px)', top: 50, right: -60 }} />
+        <div style={{ position: 'absolute', width: 350, height: 350, borderRadius: '50%', background: 'var(--page-grad3)', filter: 'blur(80px)', bottom: -60, left: '40%' }} />
       </div>
 
       {/* ── Desktop Sidebar ── */}
@@ -140,10 +140,10 @@ export default function AppLayout() {
           collapsed ? 'w-16' : 'w-56'
         )}
         style={{
-          background:           'var(--sidebar-bg)',
-          backdropFilter:       'blur(24px)',
+          background: 'var(--sidebar-bg)',
+          backdropFilter: 'blur(24px)',
           WebkitBackdropFilter: 'blur(24px)',
-          borderRight:          '1px solid var(--sidebar-border)',
+          borderRight: '1px solid var(--sidebar-border)',
         }}
       >
         <SidebarContent />
@@ -154,10 +154,10 @@ export default function AppLayout() {
         onClick={() => setCollapsed(c => !c)}
         className="hidden md:flex fixed top-1/2 -translate-y-1/2 z-30 w-5 h-9 items-center justify-center rounded-r-lg transition-all"
         style={{
-          left:       collapsed ? '3.5rem' : '13.5rem',
+          left: collapsed ? '3.5rem' : '13.5rem',
           background: 'var(--glass2)',
-          border:     '1px solid var(--glass-border)',
-          color:      'var(--text-muted)',
+          border: '1px solid var(--glass-border)',
+          color: 'var(--text-muted)',
         }}
       >
         {collapsed ? <ChevronRight size={11} /> : <ChevronLeft size={11} />}
@@ -179,10 +179,10 @@ export default function AppLayout() {
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         )}
         style={{
-          background:           'var(--sidebar-bg)',
-          backdropFilter:       'blur(24px)',
+          background: 'var(--sidebar-bg)',
+          backdropFilter: 'blur(24px)',
           WebkitBackdropFilter: 'blur(24px)',
-          borderRight:          '1px solid var(--sidebar-border)',
+          borderRight: '1px solid var(--sidebar-border)',
         }}
       >
         <SidebarContent />
